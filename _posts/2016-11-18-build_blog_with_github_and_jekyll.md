@@ -1,25 +1,27 @@
 ---
 layout: post
-title: 使用GitHub Pages+Jekyll搭建个人博客
-date: 2016-11-21
-tags: [Jekyll, GitHub, 教程]
+title: 使用Nacos搭建SpringCloud集群
+date: 2021-7-29
+tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 ---
 
-周末折腾了大概两个半天加一个晚上，基于[GitHub Pages](https://pages.github.com){:target="_blank"} + Jekyll([EN](https://jekyllrb.com "英文官网"){:target="_blank"},[CN](http://jekyll.com.cn "中文站点"){:target="_blank"})的个人博客站点终于上线了，本文将中间过程记录整理后，作为本站的第一篇文章发布出来，希望对您有所帮助。[`转载请标明出处，谢谢`]({{page.url}} "使用GitHub+Jekyll搭建个人博客")
+基于[Nacos](https://github.com/alibaba/nacos){:target="_blank"}搭建集群，希望对你有帮助。[`转载请标明出处，谢谢`]({{page.url}} "使用Nacos搭建集群")
 
 ### 概述 ###
 
-![](/assets/build_blog_with_github_and_jekyll/01.jpg)
-
-> **`GitHub Pages`** 免费无限容量的站点数据托管工具(*国内访问速度较慢*)，内置Jekyll服务，能将特定名称的代码仓库动态编译为静态网页
+> **`Nacos`** Alibaba开源的服务发现与注册中心，一个更易于构建云原生应用的动态服务发现(Nacos Discovery )、服务配置(Nacos Config)和服务管理平台。 
+> 
+>服务发现和服务健康检查
+>Nacos 使服务通过 DNS 或 HTTP 接口注册自己和发现其他服务变得简单。 Nacos 还提供服务的实时健康检查，以防止向不健康的主机或服务实例发送请求。
 >
-> **`Jekyll`** 基于Ruby的静态网页生成系统，采用模板将Markdown(或Textile)文件转换为统一的网页
+> 动态配置管理
+> 动态配置服务允许您在所有环境中以集中和动态的方式管理所有服务的配置。 Nacos 无需在更新配置时重新部署应用程序和服务，这使得配置更改更加高效和敏捷。
 >
-> **统计** 统计工具主要是为了方便查看站点的访问情况，目前支持[百度统计](http://tongji.baidu.com){:target="_blank"}和[Google Analytics](http://www.google.com/analytics/){:target="_blank"}(可同时使用)
+> 动态 DNS 服务
+> Nacos 支持加权路由，让您更容易在数据中心内的生产环境中实现中层负载均衡、灵活的路由策略、流量控制和简单的 DNS 解析服务。它可以帮助您轻松实现基于 DNS 的服务发现，并防止应用程序耦合 > 到特定于供应商的服务发现 API。
 >
-> **评论** 评论工具可以为静态页面增加评论和分享功能，目前支持国内的[多说](http://duoshuo.com){:target="_blank"}和国外的[Disqus](https://disqus.com){:target="_blank"}
->
-> > *本文将重点介绍标注 `　　　` 的必选项目，未标注的可选项目请按照给定地址自行注册即可*
+>服务和元数据管理
+> Nacos 提供了一个易于使用的服务仪表板，帮助您管理您的服务元数据、配置、kubernetes DNS、服务健康和指标统计。
 
 ### 建立GitHub Pages站点 ###
 
