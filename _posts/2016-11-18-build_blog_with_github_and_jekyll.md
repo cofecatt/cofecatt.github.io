@@ -30,7 +30,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
     ![](/assets/build_alibaba_nacos/assets.png)
  
-<br/>
 2. 解压后复制三份Nacos安装包，修改为nacos8849，nacos8850，nacos8851，搭建单机伪集群，分布式集群原理相同:<br/>
 
     > ```conf
@@ -40,7 +39,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
     ![](/assets/build_alibaba_nacos/cluster.png)
 
-<br/>
 3. 进入Nacos目录，如下图所示:<br/>
 
     ![](/assets/build_alibaba_nacos/catalogue.png)
@@ -60,7 +58,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > db.password.0=root
     > ```
 
-<br/>
 4. 将conf\cluster.conf.example改为cluster.conf,添加节点配置:<br/>
 
 
@@ -74,7 +71,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
 5. 创建mysql数据库,sql文件位置：conf\nacos-mysql.sql
 
-<br>
 6. 如果出现内存不足：修改启动脚本（bin\startup.sh）的jvm参数<br/>
     
     > ```conf
@@ -84,10 +80,9 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
     ![](/assets/build_alibaba_nacos/args.png)
 
-<br/>
 7. 分别启动nacos8849，nacos8850，nacos8851，以下是启动nacos8849，其余相同<br/>
     
-    
+
     > ```conf
     > cd nacos8849
     > bin/startup.sh 
@@ -95,7 +90,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
 
 8. 访问Nacos管理界面，浏览器中输入 http://192.168.3.14:8849/nacos 默认的用户名密码是 nacos/nacos <br/>
-    
     
     ![](/assets/build_alibaba_nacos/login.png)
 
