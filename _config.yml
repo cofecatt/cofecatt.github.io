@@ -1,35 +1,35 @@
 # Basic
-title: 周刚
-subtitle: Nicolas Chow
+title: Cofecatt
+subtitle: Richard
 description: 凡是过去 皆为序章
 # 头像里面的标题
-avatarTitle: stidio
+avatarTitle: cofecatt
 # 头像里面的描述
 avatarDesc: 编程·管理·运动·读书
-url: "http://stidio.github.io"
+url: "http://cofecatt.github.io"
 
 # Comment
 comment:
     # disqus: leopard
-    duoshuo: stidio 
+    duoshuo: cofecatt 
 
 # Social
 social:
-    weibo: 1073227497 
-    github: stidio
+    weibo: JustWanne 
+    github: cofecatt.github.io
     # twitter: 
-    mail: stidio@163.com
+    mail: cofecatt@163.com
 
 # 百度统计 
 # 使用博客模板请去掉或者更换 id 
-baidu:
-    id: 15c4fed56d4cae267af95752c20fa16e  
+#baidu:
+#    id: 15c4fed56d4cae267af95752c20fa16e  
 
 # Google Analytics
 # 使用博客模板请去掉或者更换 id
-ga:
-    id: UA-87578654-1
-    host: auto  
+#ga:
+#    id: UA-87578654-1
+#    host: auto  
 
 
 # ----------------- 上面的信息修改成你自己的 ---------------------------
