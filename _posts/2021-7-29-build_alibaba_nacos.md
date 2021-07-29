@@ -120,7 +120,6 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > make install
     > ```
 
-<br/>
 2. 配置nginx的配置文件nginx.conf文件，在***http{}*** 内添加如下配置：<br/>    
     > ```conf
     > upstream nacoscluster {
@@ -138,17 +137,13 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 	>   }
     > }
     > ```
-    
-<br/>   
-3. 运行 nginx:
+       
+3. 运行 nginx，切换目录到/usr/local/nginx/sbin下面，执行命令./nginx 启动nginx
 
-<br/>
-    > 切换目录到/usr/local/nginx/sbin下面，执行命令./nginx 启动nginx
 
-<br/>
 4. 在浏览器中输入 [127.0.0.1](http://127.0.0.1){:target="_blank"} 进行本地预览
 
-<br/>
+
 5. 成功启动的话，访问 http://本机ip地址:8847 访问nginx本地集群。
 
 
