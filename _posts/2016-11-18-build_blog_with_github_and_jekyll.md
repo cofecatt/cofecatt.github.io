@@ -9,7 +9,7 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
 ### 概述 ###
 
-> **`Nacos`** Alibaba开源的服务发现与注册中心，一个更易于构建云原生应用的动态服务发现(Nacos Discovery )、服务配置(Nacos Config)和服务管理平台。 
+> **`Nacos`** 是开源的服务发现与注册中心，一个更易于构建云原生应用的动态服务发现(Nacos Discovery)、服务配置(Nacos Config)和服务管理平台。 
 > 
 >服务发现和服务健康检查
 >Nacos 使服务通过 DNS 或 HTTP 接口注册自己和发现其他服务变得简单。 Nacos 还提供服务的实时健康检查，以防止向不健康的主机或服务实例发送请求。
@@ -23,133 +23,128 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 >服务和元数据管理
 > Nacos 提供了一个易于使用的服务仪表板，帮助您管理您的服务元数据、配置、kubernetes DNS、服务健康和指标统计。
 
-### 建立GitHub Pages站点 ###
+### 下载Nacos ###
 
-1. 在GitHub上建立一个以 ***.github.io*** 为后缀的和你帐号名一样的代码仓库，如我的帐号是:[stidio](https://github.com/stidio){:target="_blank"}，则建立的仓库名为:[stidio.github.io](https://github.com/stidio/stidio.github.io){:target="_blank"}, 同时在底部Add .gitigore选择Jekyll模板，这样Jekyll产生的临时文件，例如_site目录就不会添加到源代码管理中，当然你也可以以后手动配置:
+1. 在[GitHub](https://github.com/alibaba/nacos/releases){:target="_blank"}上下载一个与项目匹配的 ***Assets*** ，Linux系统下载以 ***.tar*** 为后缀的包,Windows下载以 ***.zip*** 为后缀的包，如果想自己编译，配置，Alibaba也提供了Source源代码可供选择:
 
-    ![](/assets/build_blog_with_github_and_jekyll/02.jpg)
+    ![](/assets/build_alibaba_nacos/assets.png)
+ 
+2. 解压后复制三份Nacos安装包，修改为nacos8849，nacos8850，nacos8851，搭建单机伪集群，分布式集群原理相同:
 
-2. 将该代码仓库克隆到地:
+    > ```conf
+    >  mv nacos nacos8849
+    > ```
+    
+    ![](/assets/build_alibaba_nacos/cluster.png)
 
-    > ```sh
-    > $ git clone https://github.com/stidio/stidio.github.io
+3. 进入Nacos目录，如下图所示:
+
+    ![](/assets/build_alibaba_nacos/catalogue.png)
+    
+    修改conf\application.properties的配置，使用外置数据源  要使用mysql5.7+（包括）
+    
+    > ```conf
+    > #使用外置mysql数据源
+    > spring.datasource.platform=mysql
+    > ### Count of DB:
+    > db.num=1
+    > ### Connect URL of DB:
+    > db.url.0=jdbc:mysql://127.0.0.1:3306/nacos?characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+    > db.user.0=root
+    > db.password.0=root
     > ```
 
-3. 创建一个测试页面并推送:
+4. 将conf\cluster.conf.example改为cluster.conf,添加节点配置:
 
-    > ```sh
-    > $ cd stidio.github.io
-    > $ echo "Hello World" > index.html
-    > $ git add --all
-    > $ git commit -m "Initial commit"
-    > $ git push -u origin master
+    > ```conf
+    > ip:port
+    > 本机IP地址:8849
+    > 本机IP地址:8850
+    > 本机IP地址:8851
     > ```
 
-4. 浏览器中输入[stidio.github.io](https://stidio.github.io)，如果一切正常，你应该能看到一个显示Hello World的页面.
+5. 创建mysql数据库,sql文件位置：conf\nacos-mysql.sql
 
-> *请将以上的 __stidio__ 替换为你申请的帐号名*
-
-### 安装配置Jekyll ###
-
-1. 安装Jekyll:
-
-    > ```sh
-    > $ gem install jekyll
+6. 如果出现内存不足：修改启动脚本（bin\startup.sh）的jvm参数
+    
+    > ```conf
+    > JAVA_OPT="${JAVA_OPT} ‐server ‐Xms512m ‐Xmx512m ‐Xmn256 ‐XX:MetaspaceSize=64m ‐XX:MaxMetaspaceSize=128m"
     > ```
 
-2. 创建或使用模板, 创建模板使用 *jekyll new __name__* 命令，但创建出来的测试模板极其简陋，在这里我主要介绍使用第三方主题，在 [这里](http://jekyllthemes.org){:target="_blank"} 你可以找到各种主题，当然你也可以直接使用我的博客模板:[点击下载](https://github.com/stidio/stidio.github.io/archive/master.zip)，下载后解压到本地代码仓库目录，并运行 *bundle install* 命令安装项目依赖包.
+    ![](/assets/build_alibaba_nacos/args.png)
 
-3. 运行 *jekyll serve* 启动本地测试服务器，Jekyll默认使用4000端口，如果被占用，可以使用 *jekyll serve -P $PORT* 指定其他端口，如果本机从没配置过Jekyll，可能会给出 *cannot load such file -- bundler* 的错误，运行 *gem install bundler* 即可解决，如果还是出现包缺失的错误，可以从以下两点排查：
+7. 分别启动nacos8849，nacos8850，nacos8851，以下是启动nacos8849，其余相同
+    
+    > ```conf
+    > cd nacos8849
+    > bin/startup.sh 
+    > ```
 
-    > * Gemfile文件未添加指定包
-    > * 运行环境冲突，可以运行 *bundle exe jekyll serve* 执行，或者运行 *sudo bundle clean --force*(**该命令会对全局环境造成影响，小心使用**) 强制清理无关包后重新运行
+8. 访问Nacos管理界面，浏览器中输入 http://192.168.3.14:8849/nacos 默认的用户名密码是 nacos/nacos
+    
+    ![](/assets/build_alibaba_nacos/login.png)
 
-4. 在浏览器中输入 [127.0.0.1:4000](http://127.0.0.1:4000){:target="_blank"} 进行本地预览
 
-> Ruby包管理工具介绍
->
-> * `gem` 全局包管理工具，类似于Python的pip, Node.js的npm -g
->   * gem install               安装组件
->   * gem install -v            安装特定版本
->   * gem list                  列出已经安装组件
->   * gem sources -a            添加源
->   * gem sources --remove      删除源
->
-> * `bundle` 项目包管理工具，可以理解为一个独立的运行环境
->   * bundle update             更新项目依赖包
->   * bundle install            安装项目依赖包
->   * sudo bundle clean --force 强制删除不相关的包
->   * bundle exe                在指定环境中运行
+### 安装配置Nginx ###
 
-### 使用我的博客模板 ###
+1. 安装Nginx前需要安装相关依赖:
 
-1. 按照注释说明修改 *_config.yml* 配置文件
-2. 删除文章目录 *_post/* 和文章图片目录 *images/posts/* 下面的所有内容
-3. Enjoy!
+    > ```conf
+    >  yum -y install gcc
+    >  yum install -y pcre pcre-devel
+    >  yum install -y zlib zlib-devel
+    >  yum install -y openssl openssl-devel
+    >  wget http://nginx.org/download/nginx-1.9.9.tar.gz  
+    >  tar -zxvf  nginx-1.9.9.tar.gz
+    > ```
+    
+    切换到cd /usr/local/java/nginx-1.9.9/下面，执行三个命令：
+    
+    > ```conf
+    > ./configure
+    > make
+    > make install
+    > ```
 
-我的模板在 [leopardpan](https://github.com/leopardpan/leopardpan.github.io){:target="_blank"} 基础上进行了修改，主要改进了以下内容:
+2. 配置nginx的配置文件nginx.conf文件，在***http{}*** 内添加如下配置：
+    
+    > ```conf
+    > upstream nacoscluster {
+	>   server 127.0.0.1:8849;
+	>   server 127.0.0.1:8850;
+	>   server 127.0.0.1:8851;
+    > }
+    >
+    > server {
+	>   listen		8847;
+	>   server_name	localhost;
+	>
+	> location /nacos/{
+	>     	proxy_pass http://nacoscluster/nacos/;
+	>   }
+    > }
+    > ```
+    
+    
 
-> * 统一风格，给关于，标签页面添加了标题栏
-> * 添加分割改进文章列表的多标签显示
-> * 修正了一些翻译不全的文字
-> * 代码颜色高亮支持，综合了Pygments monokai方案和Rouge monokai.sublime方案，[点此查看](/css/code_style_monokai.css){:target="_blank"}
-> * 底部统计和版权排版对齐
-> * 更新Jekyll及其依赖包到最新版本
-> * 修正jekyll-sitemap加载失败的问题
-> * 支持GFM形式的Markdown Codeblock解析
+3. 运行 nginx:
 
-如果喜欢请[Star!](https://github.com/stidio/stidio.github.io){:target="_blank"}，谢谢!
+    > 切换目录到/usr/local/nginx/sbin下面，执行命令./nginx 启动nginx
 
-### 编写文章 ###
+4. 在浏览器中输入 [127.0.0.1](http://127.0.0.1){:target="_blank"} 进行本地预览
 
-文章为Markdown格式，请使用.md作为后缀名，有以下两个文章目录：
+5. 成功启动的话，访问 http://本机ip地址:8847 访问nginx本地集群。
 
-> * `_posts` 文件名格式为：YEAR-MONTH-DAY-title.md
-> * `_drafts` 草稿目录，文件名格式为：title.md，即不加日期前缀，如果需要预览草稿，使用 *\--drafts* 选项运行 *jekyll serve* 或 *jekyll build*
->
-> **\* 尽量避免使用中文文件名, 具体目录结构请参考: [官方文档](http://jekyll.com.cn/docs/structure/){:target="_blank"}**
 
-每篇文章都必须以参数：
 
-> ```conf
-> ---
-> layout: post
-> title: 使用GitHub+Jekyll搭建个人博客
-> date: 2016-11-21 11:29:08 +0800
-> tags: [Jekyll, GitHub, 教程]
-> ---
-> ```
 
-作为头部信息，layout为布局格式；title为显示的文章名；date为显示的发布日期；tags为文章分类标签
-
-文章正文采用Markdown编写，如果不熟悉可以查看: [Markdown 快速入门](http://wowubuntu.com/markdown/basic.html){:target="_blank"}；强烈建议遵循[Markdown Lint](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md){:target="_blank"}，规范有一些对书写文章不友好的地方，我做了调整，以下是我的[Visual Studio Code](https://code.visualstudio.com){:target="_blank"}的配置文件:
-
-> ```json
-> "markdownlint.config": {
->         "MD002": false,                                 // 禁用文章开头必须为H1标题栏
->         "MD001": false,                                 // 禁用严格的标题层级关系(H1->H2->H3...)
->         "MD003": { "style": "setext_with_atx_closed"},  // 允许#和===形式的标题风格混用
->         "MD009": { "br_spaces": 2 },                    // 允许末尾两个空格为<BR/>自动换行模式
->         "MD013": false,                                 // 禁用单行长度限制
->         "MD014": false,                                 // 禁用sh命令以 $ 作为开始
->         "MD038": false,                                 // 禁用代码不以空格作为开始或结束
->         "MD041": false,                                 // 禁用代码段必须有标题栏
->         "MD029": { "style": "ordered" }                 // 有序列表格式为顺序方式
->     }
-> ```
-
-Jekyll的Markdown解释器从3.0开始，默认从 *redcarpet+Pygments* 换为 *kramdown+Rouge*, 现在已知的问题为：列表下不支持GFM形式的代码块(神奇的是Github下的README.md文件支持)，折中的办法是使用区块引用(Blockquote)，在其下再使用代码块(我的博客模板已针对这种情况在呈现上做了优化)
 
 ### 参考资料 ###
 
-[Github 简明教程](http://www.runoob.com/w3cnote/git-guide.html){:target="_blank"}  
-[Git 简明指南](http://rogerdudler.github.io/git-guide/index.zh.html){:target="_blank"}  
-[Jekyll 英文文档](https://jekyllrb.com/docs/home/){:target="_blank"}  
-[Jekyll 中文文档](http://jekyll.com.cn/docs/home/){:target="_blank"}  
-[Jekyll 代码高亮的几种选择](http://blog.csdn.net/qiujuer/article/details/50419279){:target="_blank"}  
-[Markdown 语法说明](http://wowubuntu.com/markdown/index.html){:target="_blank"}  
-[Markdown Lint](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md){:target="_blank"}  
-[kramdown Quick Reference](http://kramdown.gettalong.org/quickref.html){:target="_blank"}
+[Nacos文档](https://nacos.io/zh-cn/docs/what-is-nacos.html){:target="_blank"}  
+[Nginx 下载](http://nginx.org/en/download.html){:target="_blank"}   
+[Nacos 下载](https://github.com/alibaba/nacos/releases){:target="_blank"}  
+[SpringCloudAlibaba 版本依赖关系](https://github.com/alibaba/spring-cloud-alibaba/wiki/版本说明){:target="_blank"}  
 
 <br/>
 
