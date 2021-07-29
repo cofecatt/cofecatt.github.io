@@ -27,21 +27,27 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
 1. 在[GitHub](https://github.com/alibaba/nacos/releases){:target="_blank"}上下载一个与项目匹配的 ***Assets*** ，Linux系统下载以 ***.tar*** 为后缀的包,Windows下载以 ***.zip*** 为后缀的包，如果想自己编译，配置，Alibaba也提供了Source源代码可供选择:
 
-    ![](/assets/build_alibaba_nacos/assets.png)
+
+	![](/assets/build_alibaba_nacos/assets.png)
+ 
  
 2. 解压后复制三份Nacos安装包，修改为nacos8849，nacos8850，nacos8851，搭建单机伪集群，分布式集群原理相同:
 
     > ```conf
     >  mv nacos nacos8849
     > ```
-    
-    ![](/assets/build_alibaba_nacos/cluster.png)
+
+
+	![](/assets/build_alibaba_nacos/cluster.png)
+
 
 3. 进入Nacos目录，如下图所示:
 
-    ![](/assets/build_alibaba_nacos/catalogue.png)
+	![](/assets/build_alibaba_nacos/catalogue.png)
+    
     
     修改conf\application.properties的配置，使用外置数据源  要使用mysql5.7+（包括）
+    
     
     > ```conf
     > #使用外置mysql数据源
@@ -54,7 +60,9 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > db.password.0=root
     > ```
 
+
 4. 将conf\cluster.conf.example改为cluster.conf,添加节点配置:
+
 
     > ```conf
     > ip:port
@@ -63,7 +71,9 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > 本机IP地址:8851
     > ```
 
+
 5. 创建mysql数据库,sql文件位置：conf\nacos-mysql.sql
+
 
 6. 如果出现内存不足：修改启动脚本（bin\startup.sh）的jvm参数
     
@@ -71,23 +81,31 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > JAVA_OPT="${JAVA_OPT} ‐server ‐Xms512m ‐Xmx512m ‐Xmn256 ‐XX:MetaspaceSize=64m ‐XX:MaxMetaspaceSize=128m"
     > ```
 
+
     ![](/assets/build_alibaba_nacos/args.png)
 
+
 7. 分别启动nacos8849，nacos8850，nacos8851，以下是启动nacos8849，其余相同
+    
     
     > ```conf
     > cd nacos8849
     > bin/startup.sh 
     > ```
 
+
 8. 访问Nacos管理界面，浏览器中输入 http://192.168.3.14:8849/nacos 默认的用户名密码是 nacos/nacos
+    
     
     ![](/assets/build_alibaba_nacos/login.png)
 
 
+
 ### 安装配置Nginx ###
 
+
 1. 安装Nginx前需要安装相关依赖:
+
 
     > ```conf
     >  yum -y install gcc
@@ -98,7 +116,9 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     >  tar -zxvf  nginx-1.9.9.tar.gz
     > ```
     
+    
     切换到cd /usr/local/java/nginx-1.9.9/下面，执行三个命令：
+    
     
     > ```conf
     > ./configure
@@ -106,7 +126,9 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
     > make install
     > ```
 
+
 2. 配置nginx的配置文件nginx.conf文件，在***http{}*** 内添加如下配置：
+    
     
     > ```conf
     > upstream nacoscluster {
@@ -129,9 +151,12 @@ tags: [Nacos, GitHub, 教程, SpringCloud, Alibaba]
 
 3. 运行 nginx:
 
+
     > 切换目录到/usr/local/nginx/sbin下面，执行命令./nginx 启动nginx
 
+
 4. 在浏览器中输入 [127.0.0.1](http://127.0.0.1){:target="_blank"} 进行本地预览
+
 
 5. 成功启动的话，访问 http://本机ip地址:8847 访问nginx本地集群。
 
