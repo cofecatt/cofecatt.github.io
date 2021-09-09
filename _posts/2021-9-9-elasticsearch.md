@@ -18,15 +18,6 @@ Elasticsearch简称ES，是一个全文搜索服务器，也可以作为NoSQL数
 > * ES常常配合传统数据库一起使用，ES用来负责大数据的查询、搜索、统计分析。
 
 
-> ![](/assets/alfred_workflow/06.jpg)
->
-> * `Effective IP`: 查询本机和外网IP地址，解析任意URL和域名的IP地址，同时进行归属地和运营商查询，使用 *python* 实现 [点此下载](https://raw.githubusercontent.com/stidio/Alfred-Workflow/master/Effective%20IP.alfredworkflow){:target="_blank"}
->
-> ![](/assets/alfred_workflow/10.jpg)  
-> ![](/assets/alfred_workflow/11.jpg)  
-> ![](/assets/alfred_workflow/12.jpg)  
-> ![](/assets/alfred_workflow/13.jpg)
->
 
 本文源代码地址：[https://github.com/cofecatt/cofecatt.github.io/blob/main/_posts/2021-9-9-elasticsearch.md](https://github.com/cofecatt/cofecatt.github.io/blob/main/_posts/2021-9-9-elasticsearch.md)，如果喜欢请[Star!](https://github.com/cofecatt/cofecatt.github.io)，谢谢!
 
@@ -179,65 +170,136 @@ curl -XPOST 'localhost:9200/product/book/1/_update?pretty&version=2' -H 'Content
 ```
 可以看到status为409，type字段为version_conflict_engine_exception，表示版本冲突，更新失败。
 
+#### 根据主键删除 ####
+使用DELETE删除指定主键的文档：
+> curl -XDELETE 'localhost:9200/product/book/1?pretty'
+控制台输出：
+```json
+{
+   "found": true,
+   "_index": "product",
+   "_type": "book",
+   "_id": "1",
+   "_version": 10,
+   "result": "delete",
+   "_shards": {
+       "total": 2,
+       "successful": 1,
+       "failed": 0
+   }
+}
+```
+如果删除不存在的文档，found值为false。
 
-？？
-2. 点击Workflows按钮，然后点击最下面的 **+** 按钮，创建一个Blank Workflow，按照提示填入信息:
+#### 搜索文档 ####
+ES提供了强大的搜索功能，搜索参数可以在url后面，也可以放到body中。使用GET方法：
+> curl -G --data-urlencode 'q=message:炸酱面' 'localhost:9200/product/book/_search?pretty'
+或者更通用的POST方法：
+```json
+curl -XPOST 'localhost:9200/product/book/_search?pretty' -H 'Content-Type:application/json' -d'
+{
+    "query": {
+        "match": { "message": "介绍"}
+    }
+}'
+```
+> **注意：** 因为关键字里包含了中文，需要curl进行RUL编码，所以才使用了--data-urlencode 'q=message:炸酱面'，参数 "-G" 表示这是一个GET请求，
+> 如果不加 "-G" ，curl默认发出POST请求，导致ES返回一个406不支持POST请求错误响应。
 
-    ![](/assets/alfred_workflow/02.jpg)
+无论哪种查询，都会有类似如下的响应：
+```json
+{
+    "took": 7,
+    "timed_out": false,
+    "_shards": {
+        "total": 5,
+        "successful": 5,
+        "failed": 0
+    },
+    "hits": {
+        "total": 2,
+        "max_score": 0.789035,
+        "hits": [
+            {
+                "_index": "product",
+                "_type": "book",
+                "_id": "2",
+                "_score": 0.789035,
+                "_source": {
+                    "name": "100道菜",
+                    "type": "case",
+                    "postDate": "2021-9-9",
+                    "message": "介绍100道菜"
+                }
+            },
+            {
+                "_index": "product",
+                "_type": "book",
+                "_id": "1",
+                "_score": 0.78903234,
+                "_source": {
+                    "name": "100道菜",
+                    "type": "case",
+                    "postDate": "2021-9-9",
+                    "message": "介绍炸酱面，卤煮等！"
+                }
+            }
+        ]
+    }
+}
+```
 
-    > **Bundle Id** 作为该Workflow的标识为必填内容，如果不填或与其他重复，有可能造成其不能正常运行
+> hits包含了查询结果，在本例中，只有两条，Index是product，Type是book，主键是1和2，_score是搜索引擎概念，表示查询相关度，分数越高，表示此文档与关键字期望的结果匹配程度高。
+> 除了全文搜索，还可以精度搜索，使用term进行精确搜索：
 
-### Workflow - CDto ###
+```json
+curl -XGET 'localhost:9200/product/book/_search?pretty' -H 'Content-Type:application/json' -d'
+{
+    "query": {
+        "term": { "type": "food"}
+    }
+}'
+```
+如果需要完成翻页功能，可以使用from和size：
+```json
+curl -XGET 'localhost:9200/product/book/_search?pretty' -H 'Content-Type:application/json' -d'
+{
+    "from": 0, "size": 5,
+    "query": {
+        "term": { "type": "food"}
+    }
+}'
+```
+如果需要知道查询的总数，则使用_count代替_search。
+查询书中类型为菜谱的书的总数：
+```json
+curl -XGET 'localhost:9200/product/book/_count' -H 'Content-Type:application/json' -d'
+{
+    "query": {
+        "term": { "type": "food"}
+    }
+}'
+```
+如果要联合条件查询，则可以使用must关键字：
+```json
+curl -XGET 'localhost:9200/product/book/_search?pretty' -H 'Content-Type:application/json' -d'
+{
+    "from": 0, "size": 5,
+    "query": {
+        "bool": {
+            "must": {"match": { "type": "food"}},
+            "must": {"term": { "message": "介绍"}}
+        }
+    }
+}'
+```
 
-使用Terminal的一般步骤大概是运行Terminal，然后一路cd到目标文件夹后开始使用；虽然Finder有cd to插件，但也需要你一路点到指定文件夹后，才能调起来；虽然Alfred的Right Arrow按键里面有Open Terminal Here操作，但排在太后面了，打开的操作路径至少需要：Right Arrow -> 输入o -> [Command + 3]三步才能完成:
-
-![](/assets/alfred_workflow/03.jpg)
-
-作为一个需要频繁和Terminal交互的码农这完全不能忍，下面我们就利用Workflow做个一步到位的CDto神器
-
-1. 在Alfred Workflows的工作区点右键，选择菜单[Inputs -> File Filter]，并按下图设置好，其他两个选项卡使用默认设置即可:
-
-    ![](/assets/alfred_workflow/04.jpg)
-
-2. 在刚才插入的[File Filter]上点击右键，选择菜单[Insert After -> Actions -> Run Script]，并按照下图设置好，最下面的Escaping表示对指定字符进行转义，比如说:/Users/$a1，如果不对$转义，那外部会把$a1一起当做一个变量，而这个变量未定义也就是为空，传递进来的参数最终变成:/Users/，[点此查看代码](https://github.com/stidio/Alfred-Workflow/blob/master/CDto/cdto.bash){:target="_blank"}:
-
-    ![](/assets/alfred_workflow/05.jpg)
-
-### Workflow - Effective IP ###
-
-现在我们使用Python来做个更复杂的例子，[点此查看源码](https://github.com/stidio/Alfred-Workflow/blob/master/Effective%20IP/effectiveip.py){:target="_blank"}，具体分析见下图:
-
-![](/assets/alfred_workflow/07.jpg)
-
-我们基于[Full-featured python library for writing Alfred workflows](https://github.com/deanishe/alfred-workflow/){:target="_blank"}进行开发，具体的内容请参考前面的内容和[官方教程](http://www.deanishe.net/alfred-workflow/tutorial_1.html){:target="_blank"}, 这里我只对两个设置界面进行必要的解释：
-
-1. 主设置界面
-
-    ![](/assets/alfred_workflow/08.jpg)
-
-    > 1. 直接输入ip无参形式是查询本机的本地和公网地址，有参形式是进行DNS解析，因此参数是可选的，需要设置为：[Argument Optional]
-    > 2. 点击Run Behaviour按钮，进行运行行为设置
-
-2. 运行行为设置
-
-    ![](/assets/alfred_workflow/09.jpg)
-
-    > 1. 如果输入发生变化，我们肯定是希望得到之后的结果，因此我们需要即时结束掉之前的查询
-    > 2. 在输入过程中不进行查询，Alfred通过最后一个字符输入延迟来判断输入结束后才进行查询
-
-### 其他事项 ###
-
-![](/assets/alfred_workflow/14.jpg)
-
-> 1. 左边列表区域里点右键选择[Open in Finder]可以打开该Workflow的目录进行文件查看和编辑
-> 2. 点此可以调出调试窗口，查看调试信息
 
 ### 参考资料 ###
 
 [SpringBoot2 精髓 李家智著]  
-[Alfred workflow 开发指南](http://myg0u.com/python/2015/05/23/tutorial-alfred-workflow.html){:target="_blank"}  
-[JavaScript for OS X Automation by Example](http://developer.telerik.com/featured/javascript-os-x-automation-example/){:target="_blank"}  
-[Full-featured python library for writing Alfred workflows](http://www.deanishe.net/alfred-workflow/){:target="_blank"}
+[Elasticsearch 官方文档](https://www.elastic.co/guide/cn/elasticsearch/guide/current/getting-started.html) 
+
 
 <br/>
 
