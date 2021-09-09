@@ -1,14 +1,22 @@
 ---
 layout: post
-title: Alfred Workflow教程与实例
-date: 2016-11-24
-tags: [Alfred Workflow, macOS, 教程, 工具]
+title: Elasticsearch教程与实例
+date: 2021-9-9
+tags: [Elasticsearch]
 ---
 
-小帽子[Alfred](https://www.alfredapp.com){:target="_blank"}作为macOS上的最佳效率软件应该没太大争议([排名](https://github.com/hzlzh/Best-App){:target="_blank"})，而其中最强大的部分即为Alfred 2.0推出的[Workflow](https://www.alfredapp.com/workflows/){:target="_blank"}特性；其允许你将日常重复性的工作使用脚本语言(目前支持：bash, zsh, php, python, ruby, perl, osascript(AppleScript, JavaScript))封装起来，以Alfred作为统一的入口和呈现来使用，大大提高效率；本文将对其开发的一般流程进行讲述，并最终实现两个实例：
+Elasticsearch简称ES，是一个全文搜索服务器，也可以作为NoSQL数据库，存储任意格式的文档和数据，同时，也可以做大数据的分析，是一个跨界开源产品。ES有如下特点：
+> * 全文搜索引擎，ES是建立在Lucene上的开源搜索引擎可以用来进行全文搜索地理信息搜索。Wikipedia、GitHub、 StackOverFlow等网站均使用 ES.
 
-> * `CDto`: 打开Terminal并转到任意文件夹或文件所在目录，使用 *bash+osascript* 实现 [点此下载](https://raw.githubusercontent.com/stidio/Alfred-Workflow/master/CDto.alfredworkflow){:target="_blank"}
->
+> * 文档存储和查询，可以像 NoSQL 那样存储任意格式文档，并能根据条件查询文档。
+
+> * 大数据分析，ES号称能准确实时地进行大数据分析，数据量从TB到PB,国内外很多大公司都用ES做大数据分析。
+
+> * ES提供了REST API，用来简化对 ES 的操作。因此可以使用任何语言的客户端，同时也提供Java API,Spring Boot也对 REST API 进行了封装，简化了开发。
+
+> * ES常常配合传统数据库一起使用，ES用来负责大数据的查询、搜索、统计分析。
+
+
 > ![](/assets/alfred_workflow/06.jpg)
 >
 > * `Effective IP`: 查询本机和外网IP地址，解析任意URL和域名的IP地址，同时进行归属地和运营商查询，使用 *python* 实现 [点此下载](https://raw.githubusercontent.com/stidio/Alfred-Workflow/master/Effective%20IP.alfredworkflow){:target="_blank"}
