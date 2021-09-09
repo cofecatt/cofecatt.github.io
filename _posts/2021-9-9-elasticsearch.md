@@ -5,6 +5,7 @@ date: 2021-9-9
 tags: [Elasticsearch]
 ---
 
+### 概述 ###
 Elasticsearch简称ES，是一个全文搜索服务器，也可以作为NoSQL数据库，存储任意格式的文档和数据，同时，也可以做大数据的分析，是一个跨界开源产品。ES有如下特点：
 > * 全文搜索引擎，ES是建立在Lucene上的开源搜索引擎可以用来进行全文搜索地理信息搜索。Wikipedia、GitHub、 StackOverFlow等网站均使用 ES.
 
@@ -29,7 +30,7 @@ Elasticsearch简称ES，是一个全文搜索服务器，也可以作为NoSQL数
 
 本文源代码地址：[https://github.com/stidio/Alfred-Workflow](https://github.com/stidio/Alfred-Workflow){:target="_blank"}，如果喜欢请[Star!](https://github.com/stidio/Alfred-Workflow){:target="_blank"}，谢谢!
 
-### 概述 ###
+
 
 Alfred Workflow的整体架构，极度类似于Windows中的Direct Show，首先由一个Input开始，中间经过一堆filter，然后到一个Output结束，中间通过Pin连接，上一个Output Pin作为输入传递给下一个Input Pin，从而形成一个完整的Graph，而最终传递给Alfred做输出呈现的内容必须符合下面的形式：
 
