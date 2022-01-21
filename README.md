@@ -1,4 +1,4 @@
-使用GitHub Pages+Jekyll搭建[个人博客](https://stidio.github.io)
+使用GitHub Pages+Jekyll搭建个人博客
 =======
 
 ### 概述 ###
