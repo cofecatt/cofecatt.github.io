@@ -254,7 +254,7 @@ pn1的内网地址为172.18.0.2，pn2的内网地址为172.18.0.3
 
 ### 3.可能出现的错误
 
-直接打开虚拟库中的表出现，在不切换到具体的数据库下，使用[数据库名].[表名]的方式会抛出下面的错误
+#### 3.1.直接打开虚拟库中的表出现，在不切换到具体的数据库下，使用[数据库名].[表名]的方式会抛出下面的错误
 
 ![image-20220418204548160](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418204548160.png)
 
@@ -268,6 +268,12 @@ pn1的内网地址为172.18.0.2，pn2的内网地址为172.18.0.3
 
 当该值为true时，例如我们执行语句select * from TEST.tb_users 。mycat会把语句修改为 select * from tb_users去掉TEST。
 
+#### 3.2.stop节点后出现主节点无法正常运行的情况
+进入主节点的数据卷中，编辑grastate.dat这个文件
+
+**将safe_to_bootstrap: 0 改成safe_to_bootstrap: 1**
+
+就可以运行主节点了！
 
 
 > [原始链接]({{page.url}}) 版权声明：自由转载-非商用-非衍生-保持署名 \| [Creative Commons BY-NC-ND 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh)
