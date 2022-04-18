@@ -84,19 +84,19 @@ docker run -d --name mycat  -p 8066:8066 -v mycat:/usr/local/mycat/conf -v mycat
 
 执行docker volume ls 查看数据卷
 
-![image-20220418202649504](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418202649504.png)
+![image-20220418202649504](/assets/docker部署pxc集群/image-20220418202649504.png)
 
 
 
 执行docker volume inspect mycat 查看mycat数据卷位置
 
-![image-20220418202803782](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418202803782.png)
+![image-20220418202803782](/assets/docker部署pxc集群/image-20220418202803782.png)
 
 进入后编辑文件 schema.xml 
 
 因为我们刚刚把mycat和pxc集群放在同一个虚拟内网multinet下，所以我们可以执行docker network ls 查看集群节点的内网地址
 
-![image-20220418202226200](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418202226200.png)
+![image-20220418202226200](/assets/docker部署pxc集群/image-20220418202226200.png)
 
 pn1的内网地址为172.18.0.2，pn2的内网地址为172.18.0.3
 
@@ -248,7 +248,7 @@ pn1的内网地址为172.18.0.2，pn2的内网地址为172.18.0.3
 
 用navicat连接mycat
 
-![image-20220418204008910](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418204008910.png)
+![image-20220418204008910](/assets/docker部署pxc集群/image-20220418204008910.png)
 
 
 
@@ -256,11 +256,11 @@ pn1的内网地址为172.18.0.2，pn2的内网地址为172.18.0.3
 
 #### 3.1.直接打开虚拟库中的表出现，在不切换到具体的数据库下，使用[数据库名].[表名]的方式会抛出下面的错误
 
-![image-20220418204548160](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418204548160.png)
+![image-20220418204548160](/assets/docker部署pxc集群/image-20220418204548160.png)
 
 使用正常的查询语句就不会有异常
 
-![image-20220418204817347](C:\Users\HLJ\AppData\Roaming\Typora\typora-user-images\image-20220418204817347.png)
+![image-20220418204817347](/assets/docker部署pxc集群/image-20220418204817347.png)
 
 如何修改？
 
