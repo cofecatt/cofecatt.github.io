@@ -46,17 +46,13 @@ docker network create -d overlay --attachable multinet
 
 #### 1.4.创建主节点
 
-docker run -d -p 7001:3306 -e MYSQL_ROOT_PASSWORD=123456 -e CLUSTER_NAME=PXC1 -e XTRABACKUP_PASSWORD=123456 \
-
--v v1:/var/lib/mysql --privileged --name=pn1 --net=multinet pxc
+docker run -d -p 3373:3306 -e MYSQL_ROOT_PASSWORD=123456 -e CLUSTER_NAME=PXC2 -e XTRABACKUP_PASSWORD=123456 -v v1:/var/lib/mysql --privileged --name=mysql1903 --net=multinet pxc
 
 
 
 #### 1.5.创建从节点
 
-docker run -d -p 7002:3306 -e MYSQL_ROOT_PASSWORD=123456 -e CLUSTER_NAME=PXC1 -e XTRABACKUP_PASSWORD=123456 \
-
--e CLUSTER_JOIN=pn1 -v v1:/var/lib/mysql --privileged --name=pn2 --net=multinet pxc
+docker run -d -p 3374:3306 -e MYSQL_ROOT_PASSWORD=123456 -e CLUSTER_NAME=PXC2 -e XTRABACKUP_PASSWORD=123456 -e CLUSTER_JOIN=mysql1903 -v v2:/var/lib/mysql --privileged --name=mysql1904 --net=multinet pxc
 
 
 
