@@ -18,7 +18,7 @@ tags: [redis, Lua]
 
 **Redis 到 Lua 的转换表。** 
 
-* Redis 整数返回值 -> Lua 编号
+* Redis 整数返回值 -> Lua number
 * Redis 批量返回值 -> Lua 字符串
 * Redis 多批量返回值 -> Lua 表（可能嵌套了其他 Redis 数据类型）
 * Redis 状态返回值 -> Lua 表，其中包含一个包含状态的 ok 字段
